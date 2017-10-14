@@ -6,6 +6,7 @@
 #include <ArduCAM.h>
 const int CS = 16;
 
+
 WebServer server(80);
 
 ArduCAM myCAM(OV2640, CS);
