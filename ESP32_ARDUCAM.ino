@@ -1,14 +1,15 @@
 #include <Wire.h>
 #include <SPI.h>
-#include <WiFiManager.h> 
+#include <WiFiManager.h>
 #include <DNSServer.h>
 #include <WebServer.h>
 #include <ArduCAM.h>
+#include "SSD1306.h" // alias for `#include "SSD1306Wire.h"`
 const int CS = 16;
 
 
 WebServer server(80);
-
+//SSD1306  display(0x3c, 5, 4);
 ArduCAM myCAM(OV2640, CS);
 
 static const size_t bufferSize = 4096;
@@ -194,7 +195,10 @@ uint8_t temp;
 pinMode(CS,OUTPUT);
 
 //I2C START SDA, SCL
-Wire.begin(4,5);
+  Wire.begin(4,5);
+  //display.init();
+  //display.flipScreenVertically();
+  //display.setFont(ArialMT_Plain_10);
 Serial.begin(115200);
 
 // initialize SPI: SCK, MISO, MOSI, SS
@@ -223,7 +227,7 @@ Serial.println(F("OV2640 detected."));
 myCAM.set_format(JPEG);
 myCAM.InitCAM();
 
-myCAM.OV2640_set_JPEG_size(OV2640_320x240);
+myCAM.OV2640_set_JPEG_size(OV2640_640x480);
 myCAM.clear_fifo_flag();
  //WiFiManager
   //Local intialization. Once its business is done, there is no need to keep it around
@@ -257,7 +261,13 @@ Serial.println(F("Server started"));
 void loop() {
   if (WiFi.status() == WL_CONNECTED) {
     server.handleClient(); 
-      
+/*    display.setFont(ArialMT_Plain_24);
+    IPAddress myIP = WiFi.softAPIP();
+  Serial.print("AP IP address: ");
+  Serial.println(myIP);
+    display.drawString(0, 26, String(WiFi.softAPIP()));
+    display.display();
+    delay(10);*/
     }
   }
 
